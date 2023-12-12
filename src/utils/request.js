@@ -26,13 +26,13 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     // axios默认包裹了data
-    const { data, message, sucess } = response.data
-    if (sucess) {
+    const { data, message, success } = response.data
+    if (success) {
       return data
     } else {
       Message({
         type: 'error',
-        message: message
+        message
       })
       return Promise.reject(new Error(message))
     }

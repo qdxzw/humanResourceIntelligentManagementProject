@@ -42,9 +42,9 @@ export default {
   data () {
     return {
       loginForm: {
-        mobile: '',
-        password: '',
-        isAgree: false
+        mobile: process.env.NODE_ENV === 'development' ? '13800000002' : '',
+        password: process.env.NODE_ENV === 'development' ? 'hm#qd@23!' : '',
+        isAgree: process.env.NODE_ENV === 'development'
       },
       loginRules: {
         mobile: [
@@ -54,8 +54,9 @@ export default {
             trigger: 'blur'
           },
           {
-            pattern:
-              /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+            // pattern:
+            //   /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+            pattern: /^1[3-9]\d{9}$/,
             message: '手机号格式不正确',
             trigger: 'blur'
           }
@@ -89,10 +90,13 @@ export default {
     }
   },
   methods: {
-    login () {
-      this.$refs.form.validate(isOk => {
+    async login () {
+      this.$refs.form.validate(async isOk => {
         if (isOk) {
-          this.$store.dispatch('user/login', this.loginForm)
+          await this.$store.dispatch('user/login', this.loginForm)
+          // Vuex中的action返回的是promise
+          // 跳转主页
+          this.$router.push('/')
         }
       })
     }
