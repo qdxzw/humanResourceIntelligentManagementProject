@@ -77,11 +77,12 @@ export default {
         // required只能检测null undefined ""
         isAgree: [
           {
+            // 自定义校验
             validator: (rule, value, callback) => {
               // rule校验规则
               // value检验的值
-              // callback函数-promise reslove reject
-              // callback() callback(new Error(错误信息))
+              // callback函数-promise reslove reject 是必须要执行的函数
+              // callback() 成功   callback(new Error(错误信息))
               value ? callback() : callback(new Error('您必须勾选协议'))
             }
           }
@@ -91,10 +92,14 @@ export default {
   },
   methods: {
     async login () {
+      // 通过ref获取表单实例
+      // validate 校验表单的方法 可以传入一个回调函数
       this.$refs.form.validate(async isOk => {
         if (isOk) {
+          // 调用VuexAction，因为开启了命名空间，所以要带上模块名user
+          // 调用VuexAction，因为开启了命名空间，所以要带上模块名user
+          // Vuex中的action返回的是promise,要执行成功之后再进行跳转,所以这里使用async await
           await this.$store.dispatch('user/login', this.loginForm)
-          // Vuex中的action返回的是promise
           // 跳转主页
           this.$router.push('/')
         }

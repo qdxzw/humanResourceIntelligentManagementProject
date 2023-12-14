@@ -1,3 +1,7 @@
+/**
+ * 主页权限验证
+ *
+ *  */
 import router from '@/router'
 import nprogress from 'nprogress' // 进度条
 import 'nprogress/nprogress.css' // 进度条样式
@@ -10,22 +14,26 @@ import store from '@/store'
 const whiteList = ['/login', '/404']
 router.beforeEach((to, from, next) => {
   nprogress.start() // 开启进度条
+  // 判断是否有token
   if (store.getters.token) {
-    // 存在token
+    // 如果有token,则判断是否是登录页
     if (to.path === '/login') {
-      // 跳转到主页
-      next('/') // 中转到主页
-      // next有地址的话并没有执行后置守卫
+      // 如果是则跳转到主页
+      next('/')
+      // next有地址的话并没有执行后置守卫,所以要手动调用一下进度条关闭
       nprogress.done()
     } else {
-      next() // 放过
+      // 如果不是则放过
+      next()
     }
   } else {
-    // 没有token
+    // 判断是否在白名单里面
     if (whiteList.includes(to.path)) {
-      next() // 放过
+      // 如果在就放过
+      next()
     } else {
-      next('/login') // 中转到登录页
+      // 如果不在,就跳转到登录
+      next('/login')
       nprogress.done()
     }
   }
@@ -36,6 +44,5 @@ router.beforeEach((to, from, next) => {
  *
  */
 router.afterEach(() => {
-  console.log(123)
   nprogress.done() // 关闭进度条
 })

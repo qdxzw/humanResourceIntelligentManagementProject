@@ -7,12 +7,15 @@ const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // 基地址
   timeout: 10000 // 超时时间
 })
-// 请求拦截器,成功执行第一个，失败执行第二个
+// 请求拦截器,传入两个参数（回调函数），成功执行第一个，失败执行第二个
 service.interceptors.request.use(
   config => {
+    // config是配置信息
     // 注入token
     // store.getters.token=>请求头里面
+    // 有token，则进行注入(登录成功之后请求其他页面时,要携带token)
     if (store.getters.token) {
+      // 根据接口文档，需要将token值放到请求头里面的Authorization,注意格式
       config.headers.Authorization = `Bearer ${store.getters.token}`
     }
     return config
