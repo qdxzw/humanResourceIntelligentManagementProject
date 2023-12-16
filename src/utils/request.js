@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { Message } from 'element-ui'
+import router from '@/router'
 
 // 创建一个新的axios实例
 const service = axios.create({
@@ -40,7 +41,15 @@ service.interceptors.response.use(
       return Promise.reject(new Error(message))
     }
   },
-  error => {
+  async error => {
+    // 判断token值是否等于401
+    if (error.response.status === 401) {
+      Message({ type: 'warning', message: '登录超时了' })
+      // token超时了
+      await store.dispatch('user/logout') // 退出登录action
+      router.push('/login') // 跳到登录页
+      return Promise.reject(error)
+    }
     Message({
       type: 'error',
       message: error.message

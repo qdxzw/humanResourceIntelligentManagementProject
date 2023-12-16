@@ -38,6 +38,13 @@ const actions = {
   async getUserInfo (context) {
     const result = await getUserInfo()
     context.commit('setUserInfo', result)
+  },
+  // 退出登录
+  logout (context) {
+    // 1.删除token
+    context.commit('removeToken')
+    // 2.删除用户信息
+    context.commit('setUserInfo', {})
   }
 }
 export default {

@@ -12,7 +12,8 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <!-- 用户头像 -->
-          <img :src="avatar" class="user-avatar" />
+          <img v-if="avatar" :src="avatar" class="user-avatar" />
+          <span v-else class="username">{{ name?.charAt(0) }}</span>
           <!-- 用户名称 -->
           <span class="name">{{ name }}</span>
           <!-- 图标 -->
@@ -134,6 +135,16 @@ export default {
           // 用户名称距离右侧的距离
           margin-right: 10px;
           font-size: 16px;
+        }
+        .username {
+          width: 30px;
+          height: 30px;
+          line-height: 30px;
+          text-align: center;
+          background-color: #04c9be;
+          color: #fff;
+          border-radius: 50%;
+          margin-right: 4px;
         }
         .user-avatar {
           cursor: pointer;
