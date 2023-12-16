@@ -1,5 +1,6 @@
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { login, getUserInfo } from '@/api/user'
+
 // 存放数据
 const state = {
   token: getToken(), // 从缓存中读取初始值
