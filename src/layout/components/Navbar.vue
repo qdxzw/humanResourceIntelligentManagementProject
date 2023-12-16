@@ -21,22 +21,24 @@
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
-            <el-dropdown-item> Home </el-dropdown-item>
+            <el-dropdown-item> 首页 </el-dropdown-item>
           </router-link>
           <a
             target="_blank"
             href="https://github.com/PanJiaChen/vue-admin-template/"
           >
-            <el-dropdown-item>Github</el-dropdown-item>
+            <el-dropdown-item>项目地址</el-dropdown-item>
           </a>
           <a
             target="_blank"
             href="https://panjiachen.github.io/vue-element-admin-site/#/"
           >
-            <el-dropdown-item>Docs</el-dropdown-item>
+            <el-dropdown-item>修改密码</el-dropdown-item>
           </a>
-          <el-dropdown-item divided @click.native="logout">
-            <span style="display: block">Log Out</span>
+          <!-- native事件修饰符 -->
+          <!-- 注册组件的根元素的原生事件 -->
+          <el-dropdown-item @click.native="logout">
+            <span style="display: block">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -64,8 +66,9 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout () {
+      // 调用退出登录的action
       await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push('/login')
     }
   }
 }
