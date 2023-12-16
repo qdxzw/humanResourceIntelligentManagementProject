@@ -12,7 +12,7 @@ import store from '@/store'
  */
 // 白名单
 const whiteList = ['/login', '/404']
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   nprogress.start() // 开启进度条
   // 判断是否有token
   if (store.getters.token) {
@@ -24,6 +24,11 @@ router.beforeEach((to, from, next) => {
       nprogress.done()
     } else {
       // 如果不是则放过
+      // 判断是否获取过资料
+      if (!store.getters.userId) {
+        // 如果没有则获取资料
+        await store.dispatch('user/getUserInfo')
+      }
       next()
     }
   } else {

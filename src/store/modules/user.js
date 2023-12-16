@@ -1,8 +1,9 @@
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login } from '@/api/user'
+import { login, getUserInfo } from '@/api/user'
 // 存放数据
 const state = {
-  token: getToken() // 从缓存中读取初始值
+  token: getToken(), // 从缓存中读取初始值
+  userInfo: {} // 存储用户基本资料状态
 }
 // 修改数据
 const mutations = {
@@ -17,7 +18,10 @@ const mutations = {
     // 设置了vuex中的token为null
     state.token = null
     // 同步删除缓存中的token
-    removeToken()
+    removeToken(state)
+  },
+  setUserInfo (state, userInfo) {
+    state.userInfo = userInfo
   }
 }
 // 异步操作
@@ -29,6 +33,11 @@ const actions = {
     const token = await login(data)
     // 返回一个token
     context.commit('setToken', token)
+  },
+  // 获取用户的基本资料
+  async getUserInfo (context) {
+    const result = await getUserInfo()
+    context.commit('setUserInfo', result)
   }
 }
 export default {

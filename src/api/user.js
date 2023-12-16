@@ -8,3 +8,11 @@ export function login (data) {
     data // body参数位于data
   })
 }
+
+export function getUserInfo () {
+  // request执行之后会得到promise对象(再通过使用async和await可以获取结果)
+  return request({
+    url: '/sys/profile',
+    method: 'GET'
+  })
+}
