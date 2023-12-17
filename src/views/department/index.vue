@@ -36,48 +36,25 @@
   </div>
 </template>
 <script>
+import { getDepartment } from '@/api/department'
 export default {
   name: 'Department',
   data () {
     return {
-      depts: [
-        {
-          name: '传智教育',
-          managerName: '管理员',
-          children: [
-            {
-              name: '总裁办',
-              managerName: '张三'
-            },
-            {
-              name: '行政部',
-              managerName: '李四'
-            },
-            {
-              name: '人事部',
-              managerName: '王五',
-              children: [
-                {
-                  name: '财务核算部',
-                  managerName: '杜威'
-                },
-                {
-                  name: '税务管理部',
-                  managerName: '杨旭'
-                },
-                {
-                  name: '薪资管理部',
-                  managerName: '李生根'
-                }
-              ]
-            }
-          ]
-        }
-      ],
+      depts: [], // 数据属性
       defaultProps: {
         label: 'name', // 要显示的字段的名字
         children: 'children' // 读取子节点的字段名
       }
+    }
+  },
+  created () {
+    this.getDepartment() // 调用获取数据接口
+  },
+  methods: {
+    async getDepartment () {
+      const result = await getDepartment()
+      this.depts = result
     }
   }
 }
