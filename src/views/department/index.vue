@@ -14,7 +14,7 @@
             align="middle"
           >
             <el-col>{{ data.name }}</el-col>
-            <el-col :span="4"
+            <el-col :span="10"
               ><span class="tree-manager">{{ data.managerName }}</span>
               <el-dropdown>
                 <!-- 显示区域内容 -->
@@ -37,6 +37,7 @@
 </template>
 <script>
 import { getDepartment } from '@/api/department'
+import { transListToTreeData } from '@/utils'
 export default {
   name: 'Department',
   data () {
@@ -54,7 +55,8 @@ export default {
   methods: {
     async getDepartment () {
       const result = await getDepartment()
-      this.depts = result
+      console.log(result)
+      this.depts = transListToTreeData(result, 0)
     }
   }
 }
@@ -68,5 +70,6 @@ export default {
   width: 50px;
   display: inline-block;
   margin: 10px;
+  margin-right: 40px;
 }
 </style>
