@@ -21,7 +21,8 @@
             <el-col>{{ data.name }}</el-col>
             <el-col :span="10"
               ><span class="tree-manager">{{ data.managerName }}</span>
-              <el-dropdown @command="operateDept">
+              <!-- $event 实参 表示类型 -->
+              <el-dropdown @command="operateDept($event, data.id)">
                 <!-- 显示区域内容 -->
                 <span class="el-dropdown-link">
                   操作<i class="el-icon-arrow-down el-icon--right" />
@@ -40,7 +41,7 @@
     </div>
     <!-- 放置弹层内容 -->
     <!-- sync表示会接收子组件的事件 update:showDialog,值=>属性-->
-    <add-dept :show-dialog.sync="showDialog" />
+    <add-dept :current-node-id="currentNodeId" :show-dialog.sync="showDialog" />
   </div>
 </template>
 <script>
@@ -52,6 +53,7 @@ export default {
   components: { AddDept },
   data () {
     return {
+      currentNodeId: null, // 存储当前点击的id
       depts: [], // 数据属性
       defaultProps: {
         label: 'name', // 要显示的字段的名字
@@ -69,10 +71,11 @@ export default {
       this.depts = transListToTreeData(result, 0)
     },
     // 操作部门的方法
-    operateDept (type) {
+    operateDept (type, id) {
       if (type === 'add') {
         // 添加子部门
         this.showDialog = true
+        this.currentNodeId = id
       }
     }
   }
