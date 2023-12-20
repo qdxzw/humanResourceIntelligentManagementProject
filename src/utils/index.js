@@ -121,15 +121,19 @@ export function param2Obj (url) {
  * 列表型数据转化树形
  */
 export function transListToTreeData (list, rootValue) {
+  // 定义一个空数组接收处理之后的数据
   const arr = []
+  // 通过对返回数据的观察，可以发现子节点的pid是父节点的id，可以通过这个对返回数据进行处理
   list.forEach(item => {
     if (item.pid === rootValue) {
-      // 找到了匹配的节点
+      // 第一次执行时，找到根节点并添加到数组中
       arr.push(item)
-      // 当前节点的id和当前节点的子节点的pid是相等的
+      // 传入父节点的id值 ，找到和父节点对应的子节点
       const children = transListToTreeData(list, item.id)
-      item.children = children // 将子节点赋值给当前节点
+      // 把对应的子节点添加到父节点里面 (新增属性)
+      item.children = children
     }
   })
+  // 返回处理之后的结果
   return arr
 }
