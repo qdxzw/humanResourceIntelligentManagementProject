@@ -26,6 +26,8 @@
           size="mini"
         >
           <!-- 下拉选项 循环负责人数据 label表示显示的字段 value表示存储的字段-->
+          <!-- label表示下拉菜单所显示的数据
+             v-model的值为当前被选中的el-option的 value 属性值-->
           <el-option
             v-for="item in managerList"
             :key="item.id"
@@ -73,6 +75,7 @@ export default {
       default: false
     },
     currentNodeId: {
+      // 获取主组件传递的id，根据这个id进行子部门的添加
       type: Number,
       default: null
     }
@@ -160,6 +163,7 @@ export default {
     }
   },
   computed: {
+    // 标题不是表单所以不能绑定v-model事件，使用计算属性进行更新
     showTitle () {
       return this.formData.id ? '编辑部门' : '新增部门'
     }
@@ -196,6 +200,7 @@ export default {
             msg = '更新'
           } else {
             // 新增场景
+            // ...this.addDept展开运算符（拷贝），调用接口添加数据
             await addDepartment({
               ...this.formData,
               pid: this.currentNodeId
