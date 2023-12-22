@@ -16,7 +16,7 @@
       <!-- 放置分页组件 -->
       <el-row type="flex" style="height: 60px" align="middle" justify="end">
         <!-- 放置分页组件 -->
-        <el-pagination layout="pre,pager,next" />
+        <el-pagination layout="prev,pager,next" />
       </el-row>
     </div>
   </div>
