@@ -10,24 +10,46 @@
       <!-- 放置table表格组件 -->
       <el-table :data="roleList">
         <!-- 放置列 -->
-        <el-table-column align="center" width="200" prop="name" label="角色" />
+        <el-table-column align="center" width="200" prop="name" label="角色">
+          <template v-slot="{ row }">
+            <!-- 条件判断 -->
+            <el-input v-if="row.isEdit" size="mini" />
+            <span v-else>{{ row.name }}</span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" width="200" prop="state" label="启用">
           <!-- 自定义列结构 -->
           <template v-slot="{ row }">
-            <span>
+            <el-switch v-if="row.isEdit" />
+            <span v-else>
               {{
                 row.state === 1 ? '已启用' : row.state === 0 ? '未启用' : '无'
               }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="description" label="描述" />
+        <el-table-column align="center" prop="description" label="描述">
+          <template v-slot="{ row }">
+            <el-input v-if="row.isEdit" size="mini" />
+            <span v-else>{{ row.description }}</span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="操作">
           <!-- 放置操作按钮 -->
-          <template>
-            <el-button size="mini" type="text">分配权限</el-button>
-            <el-button size="mini" type="text">编辑</el-button>
-            <el-button size="mini" type="text">删除</el-button>
+          <template v-slot="{ row }">
+            <!-- 编辑状态 -->
+            <template v-if="row.isEdit">
+              <el-button type="primary" size="mini">确定</el-button>
+              <el-button size="mini">取消</el-button>
+            </template>
+            <!-- 非编辑状态 -->
+            <template v-else
+              ><el-button size="mini" type="text">分配权限</el-button>
+              <el-button size="mini" type="text" @click="btnEditRow(row)"
+                >编辑</el-button
+              >
+              <el-button size="mini" type="text">删除</el-button></template
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -130,6 +152,14 @@ export default {
       const { rows, total } = await getRoleList(this.pageParams)
       this.roleList = rows // 赋值数据
       this.pageParams.total = total
+      // 针对每一行数据添加一个编辑标记
+      this.roleList.forEach(item => {
+        // item.isEdit = false // 添加一个属性 初始值为false
+        // 数据响应式的问题 数据变化 视图更新
+        // 添加的动态属性 不具备响应式特点
+        // this.$set(目标对象，属性名称，初始值)可以针对目标对象 添加的属性 添加响应式
+        this.$set(item, 'isEdit', false)
+      })
     },
     // 切换分页时，请求新的数据
     changePage (newPage) {
@@ -151,6 +181,11 @@ export default {
     btnCancel () {
       this.$refs.roleForm.resetFields() // 将数据重置
       this.showDialog = false
+    },
+    // 点击编辑行
+    btnEditRow (row) {
+      console.log(row)
+      row.isEdit = true
     }
   }
 }
