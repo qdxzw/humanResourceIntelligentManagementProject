@@ -53,8 +53,12 @@
           <template v-slot="{ row }">
             <!-- 编辑状态 -->
             <template v-if="row.isEdit">
-              <el-button type="primary" size="mini">确定</el-button>
-              <el-button size="mini">取消</el-button>
+              <el-button type="primary" size="mini" @click="btnEditOk(row)"
+                >确定</el-button
+              >
+              <el-button size="mini" @click="row.isEdit = false"
+                >取消</el-button
+              >
             </template>
             <!-- 非编辑状态 -->
             <template v-else
@@ -130,7 +134,7 @@
   </div>
 </template>
 <script>
-import { getRoleList, addRole } from '@/api/role'
+import { getRoleList, addRole, updateRole } from '@/api/role'
 export default {
   name: 'Role',
   data () {
@@ -209,6 +213,23 @@ export default {
       row.editRow.name = row.name
       row.editRow.state = row.state
       row.editRow.description = row.description
+    },
+    async btnEditOk (row) {
+      // 检查必填
+      if (row.editRow.name && row.editRow.description) {
+        // 调用更新接口
+        await updateRole({ ...row.editRow, id: row.id })
+        this.$message.success('更新数据成功')
+        // 更新显示数据 退出编辑状态
+        // row.name=row.editRow.name //eslint的校验（误判）
+        // Object.assign(target,source)
+        Object.assign(row, {
+          ...row.editRow,
+          isEdit: false // 退出编辑模式
+        }) // 规避eslint的误判
+      } else {
+        this.$message.warning('角色和描述不能为空')
+      }
     }
   }
 }
