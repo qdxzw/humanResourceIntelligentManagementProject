@@ -12,3 +12,16 @@ export function getRoleList (params) {
     params // 查询参数,会拼接到url地址上
   })
 }
+
+/**
+ *
+ * 新增-角色
+ *
+ */
+export function addRole (data) {
+  return request({
+    url: '/sys/role',
+    method: 'POST',
+    data
+  })
+}

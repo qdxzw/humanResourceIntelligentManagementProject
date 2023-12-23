@@ -44,7 +44,12 @@
       </el-row>
     </div>
     <!-- 放置弹层 -->
-    <el-dialog title="新增角色" width="500px" :visible.sync="showDialog">
+    <el-dialog
+      title="新增角色"
+      width="500px"
+      :visible.sync="showDialog"
+      @close="btnCancel"
+    >
       <!-- 表单内容 -->
       <el-form
         ref="roleForm"
@@ -56,7 +61,8 @@
           <el-input v-model="roleForm.name" style="width: 300px" size="mini" />
         </el-form-item>
         <!-- 如果不需要校验，就不需要写prop属性 -->
-        <el-form-item label="启用">
+        <!-- 重置表单数据，需要prop属性 -->
+        <el-form-item label="启用" prop="state">
           <el-switch
             v-model="roleForm.state"
             :active-value="1"
@@ -76,8 +82,10 @@
         <el-form-item>
           <el-row type="flex" justify="center">
             <el-cloumn :span="12">
-              <el-button type="primary" size="mini">确认</el-button>
-              <el-button size="mini">取消</el-button>
+              <el-button type="primary" size="mini" @click="btnOk"
+                >确认</el-button
+              >
+              <el-button size="mini" @click="btnCancel">取消</el-button>
             </el-cloumn>
           </el-row>
         </el-form-item>
@@ -86,7 +94,7 @@
   </div>
 </template>
 <script>
-import { getRoleList } from '@/api/role'
+import { getRoleList, addRole } from '@/api/role'
 export default {
   name: 'Role',
   data () {
@@ -127,6 +135,22 @@ export default {
     changePage (newPage) {
       this.pageParams.page = newPage // 赋值当前页码
       this.getRoleList()
+    },
+    btnOk () {
+      this.$refs.roleForm.validate(async isOk => {
+        if (isOk) {
+          // 调用新增接口
+          await addRole(this.roleForm)
+          // 重新渲染页面并关闭弹层
+          this.getRoleList()
+          this.btnCancel()
+          this.$message.success('添加成功')
+        }
+      })
+    },
+    btnCancel () {
+      this.$refs.roleForm.resetFields() // 将数据重置
+      this.showDialog = false
     }
   }
 }
