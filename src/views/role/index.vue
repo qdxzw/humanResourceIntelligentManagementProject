@@ -66,8 +66,19 @@
               <el-button size="mini" type="text" @click="btnEditRow(row)"
                 >编辑</el-button
               >
-              <el-button size="mini" type="text">删除</el-button></template
-            >
+              <el-popconfirm
+                title="这是一段内容确定删除吗？"
+                @onConfirm="confirmDel(row.id)"
+              >
+                <el-button
+                  slot="reference"
+                  style="margin-left: 10px"
+                  size="mini"
+                  type="text"
+                  >删除</el-button
+                >
+              </el-popconfirm>
+            </template>
           </template>
         </el-table-column>
       </el-table>
@@ -134,7 +145,7 @@
   </div>
 </template>
 <script>
-import { getRoleList, addRole, updateRole } from '@/api/role'
+import { getRoleList, addRole, updateRole, deleteRole } from '@/api/role'
 export default {
   name: 'Role',
   data () {
@@ -230,6 +241,14 @@ export default {
       } else {
         this.$message.warning('角色和描述不能为空')
       }
+    },
+    // 点击了确定触发的
+    async confirmDel (id) {
+      await deleteRole(id) // 后端删除
+      this.$message.success('删除数据成功')
+      // 删除的如果是最后一个
+      if (this.roleList.length === 1) this.pageParams.page--
+      this.getRoleList()
     }
   }
 }
