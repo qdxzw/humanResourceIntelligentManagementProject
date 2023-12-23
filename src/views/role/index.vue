@@ -13,14 +13,24 @@
         <el-table-column align="center" width="200" prop="name" label="角色">
           <template v-slot="{ row }">
             <!-- 条件判断 -->
-            <el-input v-if="row.isEdit" size="mini" />
+            <el-input
+              v-if="row.isEdit"
+              v-model="row.editRow.name"
+              size="mini"
+            />
             <span v-else>{{ row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" width="200" prop="state" label="启用">
           <!-- 自定义列结构 -->
           <template v-slot="{ row }">
-            <el-switch v-if="row.isEdit" />
+            <!-- 开 1  关 0 -->
+            <el-switch
+              v-if="row.isEdit"
+              v-model="row.editRow.state"
+              :active-value="1"
+              :inactive-value="0"
+            />
             <span v-else>
               {{
                 row.state === 1 ? '已启用' : row.state === 0 ? '未启用' : '无'
@@ -30,7 +40,11 @@
         </el-table-column>
         <el-table-column align="center" prop="description" label="描述">
           <template v-slot="{ row }">
-            <el-input v-if="row.isEdit" size="mini" />
+            <el-input
+              v-if="row.isEdit"
+              v-model="row.editRow.description"
+              size="mini"
+            />
             <span v-else>{{ row.description }}</span>
           </template>
         </el-table-column>
@@ -159,6 +173,12 @@ export default {
         // 添加的动态属性 不具备响应式特点
         // this.$set(目标对象，属性名称，初始值)可以针对目标对象 添加的属性 添加响应式
         this.$set(item, 'isEdit', false)
+        // 初始化定义缓存数据
+        this.$set(item, 'editRow', {
+          name: item.name,
+          state: item.state,
+          description: item.description
+        })
       })
     },
     // 切换分页时，请求新的数据
@@ -184,8 +204,11 @@ export default {
     },
     // 点击编辑行
     btnEditRow (row) {
-      console.log(row)
       row.isEdit = true
+      // 更新缓存数据
+      row.editRow.name = row.name
+      row.editRow.state = row.state
+      row.editRow.description = row.description
     }
   }
 }
