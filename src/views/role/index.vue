@@ -8,8 +8,9 @@
         >
       </div>
       <!-- 放置table表格组件 -->
-      <el-table :data="roleList">
+      <el-table :data="roleList" border>
         <!-- 放置列 -->
+        <el-table-column align="center" width="200" prop="id" label="序号" />
         <el-table-column align="center" width="200" prop="name" label="角色">
           <template v-slot="{ row }">
             <!-- 条件判断 -->
