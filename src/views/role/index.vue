@@ -132,12 +132,12 @@
         </el-form-item>
         <el-form-item>
           <el-row type="flex" justify="center">
-            <el-cloumn :span="12">
+            <el-col :span="12">
               <el-button type="primary" size="mini" @click="btnOk"
                 >确认</el-button
               >
               <el-button size="mini" @click="btnCancel">取消</el-button>
-            </el-cloumn>
+            </el-col>
           </el-row>
         </el-form-item>
       </el-form>
