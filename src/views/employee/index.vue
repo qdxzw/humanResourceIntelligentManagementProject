@@ -10,6 +10,14 @@
           placeholder="输入员工姓名全员搜索"
         />
         <!-- 树形组件 -->
+        <!-- 数据、树形配置 -->
+        <el-tree
+          :data="depts"
+          :props="defaultProps"
+          default-expand-all="true"
+          :expand-on-click-node="false"
+          :highlight-current="true"
+        />
       </div>
       <div class="right">
         <el-row class="opeate-tools" type="flex" justify="end">
@@ -25,8 +33,27 @@
 </template>
 
 <script>
+import { getDepartment } from '@/api/department'
+import { transListToTreeData } from '@/utils/index'
 export default {
-  name: 'Employee'
+  name: 'Employee',
+  data () {
+    return {
+      depts: [], // 组织数据
+      defaultProps: {
+        label: 'name',
+        children: 'children'
+      }
+    }
+  },
+  created () {
+    this.getDepartment()
+  },
+  methods: {
+    async getDepartment () {
+      this.depts = transListToTreeData(await getDepartment(), 0)
+    }
+  }
 }
 </script>
 
