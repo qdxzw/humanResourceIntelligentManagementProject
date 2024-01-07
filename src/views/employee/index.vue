@@ -11,12 +11,16 @@
         />
         <!-- 树形组件 -->
         <!-- 数据、树形配置 -->
+        <!-- node-key标识唯一性 -->
         <el-tree
+          ref="deptTree"
+          node-key="id"
           :data="depts"
           :props="defaultProps"
-          default-expand-all="true"
+          :default-expand-all="true"
           :expand-on-click-node="false"
           :highlight-current="true"
+          @current-change="selectNode"
         />
       </div>
       <div class="right">
@@ -43,6 +47,10 @@ export default {
       defaultProps: {
         label: 'name',
         children: 'children'
+      },
+      // 存储查询参数
+      queryParams: {
+        departmentId: null
       }
     }
   },
@@ -51,7 +59,21 @@ export default {
   },
   methods: {
     async getDepartment () {
+      // 递归方法 将列表转化成树形
       this.depts = transListToTreeData(await getDepartment(), 0)
+      // 获取首个节点并记录
+      this.queryParams.departmentId = this.depts[0].id
+      // 设置选中节点
+      // 数组件渲染是异步是，等到更新完毕
+      this.$nextTick(() => {
+        // 此时意味着数渲染完毕
+        this.$refs.deptTree.setCurrentKey(this.queryParams.departmentId)
+      })
+    },
+    // 切换节点
+    selectNode (node) {
+      console.log(node)
+      this.queryParams.departmentId = node.id
     }
   }
 }
