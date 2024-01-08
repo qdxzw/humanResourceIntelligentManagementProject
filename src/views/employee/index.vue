@@ -3,11 +3,13 @@
     <div class="app-container">
       <div class="left">
         <el-input
+          v-model="queryParams.keyword"
           style="margin-bottom: 10px"
           type="text"
           prefix-icon="el-icon-search"
           size="small"
           placeholder="输入员工姓名全员搜索"
+          @input="changeValue"
         />
         <!-- 树形组件 -->
         <!-- 数据、树形配置 -->
@@ -93,7 +95,8 @@ export default {
       queryParams: {
         departmentId: null,
         page: 1, // 当前页码
-        pagesize: 5 // 每页显示的条数
+        pagesize: 5, // 每页显示的条数
+        keyword: ''
       },
       list: [], // 存储员工列表数据
       total: 0 // 记录员工的总数
@@ -133,6 +136,17 @@ export default {
     changePage (newPage) {
       this.queryParams.page = newPage // 赋值新页码
       this.getEmployeeList()
+    },
+    // 输入值内容改变时触发
+    changeValue () {
+      // 使用防抖节约资源
+      clearTimeout(this.timer)
+      // 页码设置第一页
+      this.timer = setTimeout(() => {
+        this.queryParams.page = 1
+        // 查询员工
+        this.getEmployeeList()
+      }, 300)
     }
   }
 }
