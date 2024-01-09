@@ -7,18 +7,20 @@
   >
     <el-row type="flex" justify="center">
       <div class="upload-excel">
+        <!-- accept=".xlsx, .xls" 只接收excel的文件 -->
         <input
           ref="excel-upload-input"
           class="excel-upload-input"
           type="file"
           accept=".xlsx, .xls"
+          @change="uploadChange"
         />
         <div class="drop">
           <i class="el-icon-upload" />
-          <el-button type="text">下载导入模板</el-button>
+          <el-button type="text" @click="getTemplate">下载导入模板</el-button>
           <span
             >将文件拖到此处或
-            <el-button type="text">点击上传</el-button>
+            <el-button type="text" @click="handleUpload">点击上传</el-button>
           </span>
         </div>
       </div>
@@ -35,6 +37,8 @@
   </el-dialog>
 </template>
 <script>
+import { getExportTemplate, uploadExcel } from '@/api/employee'
+import FileSaver from 'file-saver'
 export default {
   props: {
     showExcelDialog: {
@@ -42,7 +46,35 @@ export default {
       default: false
     }
   },
-  methods: {}
+  methods: {
+    async getTemplate () {
+      FileSaver.saveAs(await getExportTemplate(), '员工导入模板.xlsx')
+    },
+    // 弹出文件选择器-只有一种方式，通过input file
+    handleUpload () {
+      this.$refs['excel-upload-input'].click()
+    },
+    async uploadChange (event) {
+      // input文件列表
+      const files = event.target.files
+      if (files.length > 0) {
+        // 大于0，说明有文件要上传
+        const data = new FormData()
+        // file: file类型
+        data.append('file', files[0]) // 将文件参数加入到formData中
+        try {
+          await uploadExcel(data)
+          // 成功
+          this.$emit('uploadSucess') // 通知父组件 我上传成功
+          this.$emit('update:showExcelDialog', false)
+        } catch (error) {
+          // 捕获失败
+        } finally {
+          this.$refs['excel-upload-input'].value = ''
+        }
+      }
+    }
+  }
 }
 </script>
 
