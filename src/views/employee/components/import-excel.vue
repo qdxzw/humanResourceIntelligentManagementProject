@@ -67,6 +67,7 @@ export default {
           // 成功
           this.$emit('uploadSucess') // 通知父组件 我上传成功
           this.$emit('update:showExcelDialog', false)
+          this.$message.success('上传文件成功')
         } catch (error) {
           // 捕获失败
         } finally {
