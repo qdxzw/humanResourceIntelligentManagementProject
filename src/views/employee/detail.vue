@@ -96,6 +96,7 @@
 
 <script>
 import selectTree from './components/select-tree.vue'
+import { addEmployee } from '@/api/employee'
 export default {
   components: { selectTree },
   data() {
@@ -141,7 +142,15 @@ export default {
     }
   }, methods: {
     saveData() {
-      this.$refs.userForm.validate()
+      this.$refs.userForm.validate(async isOk => {
+        // 如果校验成功
+        if (isOk) {
+          await addEmployee(this.userInfo)
+          this.$message.success('新增员工成功')
+          // 跳转到员工页面
+          this.$router.push('/employee')
+        }
+      })
     }
   }
 }
