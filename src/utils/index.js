@@ -131,7 +131,9 @@ export function transListToTreeData (list, rootValue) {
       // 传入父节点的id值 ，找到和父节点对应的子节点
       const children = transListToTreeData(list, item.id)
       // 把对应的子节点添加到父节点里面 (新增属性)
-      item.children = children
+      if (children.length) {
+        item.children = children
+      }
     }
   })
   // 返回处理之后的结果
