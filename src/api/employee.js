@@ -78,3 +78,15 @@ export function addEmployee (data) {
     data
   })
 }
+
+/**
+ *
+ * 获取-员工-基本信息
+ *
+ */
+export function getEmployeeDetail (id) {
+  return request({
+    url: `/sys/user/${id}`,
+    method: 'GET'
+  })
+}
