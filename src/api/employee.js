@@ -90,3 +90,16 @@ export function getEmployeeDetail (id) {
     method: 'GET'
   })
 }
+
+/**
+ *
+ * 修改-员工-基本信息
+ *
+ */
+export function updateEmployee (data) {
+  return request({
+    url: `/sys/user/${data.id}`,
+    method: 'PUT',
+    data
+  })
+}
