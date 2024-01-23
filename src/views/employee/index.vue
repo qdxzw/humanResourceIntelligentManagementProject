@@ -68,7 +68,7 @@
                 @click="$router.push(`/employee/detail/${row.id}`)"
                 >查看</el-button
               >
-              <el-button size="mini" type="text" @click="btnRole"
+              <el-button size="mini" type="text" @click="btnRole(row.id)"
                 >角色</el-button
               >
               <el-popconfirm
@@ -112,6 +112,20 @@
           {{ item.name }}</el-checkbox
         >
       </el-checkbox-group>
+      <el-row slot="footer" type="flex" justify="center">
+        <el-col :span="6">
+          <el-button
+            type="primary"
+            size="mini"
+            justify="center"
+            @click="btnRoleOk"
+            >确定</el-button
+          >
+          <el-button size="mini" @click="showRoleDialog = false"
+            >取消</el-button
+          >
+        </el-col>
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -123,7 +137,9 @@ import {
   getEmployeeList,
   exportEmployee,
   delEmployee,
-  getEnableRoleList
+  getEnableRoleList,
+  getEmployeeDetail,
+  assignRole
 } from '@/api/employee'
 import FileSaver from 'file-saver'
 import ImportExcel from './components/import-excel.vue'
@@ -151,7 +167,8 @@ export default {
       total: 0, // 记录员工的总数
       showRoleDialog: false, // 控制角色弹层的显隐
       roleList: [], // 接收角色列表
-      roleIds: [] // 用于多选框数据双向绑定，存储选中的id
+      roleIds: [], // 用于多选框数据双向绑定，存储选中的id
+      currentUserId: null // 用来记录当前点击的用户id
     }
   },
   created () {
@@ -221,9 +238,22 @@ export default {
       this.$message.success('删除员工成功')
     },
     // 点击角色按钮弹出层
-    async btnRole () {
-      this.showRoleDialog = true
+    async btnRole (id) {
       this.roleList = await getEnableRoleList()
+      // 记录当前点击的id 因为后边 确定取消要存取给对应的用户
+      this.currentUserId = id
+      const { roleIds } = await getEmployeeDetail(id)
+      this.roleIds = roleIds
+      this.showRoleDialog = true
+    },
+    // 点击角色的确定
+    async btnRoleOk () {
+      await assignRole({
+        id: this.currentUserId,
+        roleIds: this.roleIds
+      })
+      this.$message.success('分配用户角色成功')
+      this.showRoleDialog = false
     }
   }
 }

@@ -115,3 +115,16 @@ export function getEnableRoleList () {
     method: 'GET'
   })
 }
+
+/**
+ *
+ * 获取-已启用的角色列表
+ *
+ */
+export function assignRole (data) {
+  return request({
+    url: '/sys/user/assignRoles',
+    method: 'PUT',
+    data
+  })
+}
