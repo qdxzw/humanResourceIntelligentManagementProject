@@ -64,6 +64,11 @@ export const constantRoutes = [
       }
     ]
   },
+  // 404 page must be placed at the end !!!
+  { path: '*', redirect: '/404', hidden: true }
+]
+// 动态路由
+export const asyncRoutes = [
   department,
   role,
   employee,
@@ -71,17 +76,13 @@ export const constantRoutes = [
   attendance,
   approval,
   salary,
-  social,
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  social
 ]
-
 const createRouter = () =>
   new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
+    routes: constantRoutes // 默认引入静态路由
   })
 
 const router = createRouter()
