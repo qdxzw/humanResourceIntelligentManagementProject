@@ -62,3 +62,16 @@ export function getRoleDetail (id) {
     method: 'GET'
   })
 }
+
+/**
+ *
+ * 分配权限-角色
+ *
+ */
+export function assignPrem (data) {
+  return request({
+    url: '/sys/role/assignPrem',
+    method: 'PUT',
+    data
+  })
+}

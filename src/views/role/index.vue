@@ -149,6 +149,8 @@
     <el-dialog :visible.sync="showPermissionDialog" title="分配权限">
       <!-- 内容 -->
       <el-tree
+        ref="permTree"
+        check-strictly
         node-key="id"
         :data="permissionData"
         :props="{ label: 'name' }"
@@ -156,6 +158,16 @@
         default-expand-all
         :default-checked-keys="permIds"
       />
+      <el-row slot="footer" type="flex" justify="center">
+        <el-col :span="6">
+          <el-button type="primary" size="mini" @click="btnPermissionOk"
+            >确定</el-button
+          >
+          <el-button size="mini" @click="showPermissionDialog = false"
+            >取消</el-button
+          >
+        </el-col>
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -165,7 +177,8 @@ import {
   addRole,
   updateRole,
   deleteRole,
-  getRoleDetail
+  getRoleDetail,
+  assignPrem
 } from '@/api/role'
 import { getPermissionList } from '@/api/permission'
 import { transListToTreeData } from '@/utils/index'
@@ -284,6 +297,14 @@ export default {
       this.permIds = permIds
       this.permissionData = transListToTreeData(await getPermissionList(), 0)
       this.showPermissionDialog = true
+    },
+    async btnPermissionOk () {
+      await assignPrem({
+        id: this.currentRoleId,
+        permIds: this.$refs.permTree.getCheckedKeys()
+      })
+      this.$message.success('角色分配权限成功')
+      this.showPermissionDialog = false
     }
   }
 }
