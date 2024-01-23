@@ -68,7 +68,9 @@
                 @click="$router.push(`/employee/detail/${row.id}`)"
                 >查看</el-button
               >
-              <el-button size="mini" type="text">角色</el-button>
+              <el-button size="mini" type="text" @click="btnRole"
+                >角色</el-button
+              >
               <el-popconfirm
                 title="确认删除该行数据吗？"
                 @onConfirm="confirmDel(row.id)"
@@ -101,13 +103,28 @@
       :show-excel-dialog.sync="showExcelDialog"
       @uploadSucess="getEmployeeList"
     />
+    <!-- 放置角色弹层 -->
+    <el-dialog :visible.sync="showRoleDialog" title="分配角色">
+      <!-- 内容 -->
+      <el-checkbox-group v-model="roleIds">
+        <!-- 要执行checkbox的存储值 item.id -->
+        <el-checkbox v-for="item in roleList" :key="item.id" :label="item.id">
+          {{ item.name }}</el-checkbox
+        >
+      </el-checkbox-group>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getDepartment } from '@/api/department'
 import { transListToTreeData } from '@/utils/index'
-import { getEmployeeList, exportEmployee, delEmployee } from '@/api/employee'
+import {
+  getEmployeeList,
+  exportEmployee,
+  delEmployee,
+  getEnableRoleList
+} from '@/api/employee'
 import FileSaver from 'file-saver'
 import ImportExcel from './components/import-excel.vue'
 export default {
@@ -131,7 +148,10 @@ export default {
         keyword: ''
       },
       list: [], // 存储员工列表数据
-      total: 0 // 记录员工的总数
+      total: 0, // 记录员工的总数
+      showRoleDialog: false, // 控制角色弹层的显隐
+      roleList: [], // 接收角色列表
+      roleIds: [] // 用于多选框数据双向绑定，存储选中的id
     }
   },
   created () {
@@ -199,6 +219,11 @@ export default {
       }
       this.getEmployeeList()
       this.$message.success('删除员工成功')
+    },
+    // 点击角色按钮弹出层
+    async btnRole () {
+      this.showRoleDialog = true
+      this.roleList = await getEnableRoleList()
     }
   }
 }

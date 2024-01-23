@@ -103,3 +103,15 @@ export function updateEmployee (data) {
     data
   })
 }
+
+/**
+ *
+ * 获取-已启用的角色列表
+ *
+ */
+export function getEnableRoleList () {
+  return request({
+    url: '/sys/role/list/enabled',
+    method: 'GET'
+  })
+}
