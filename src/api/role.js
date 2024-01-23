@@ -50,3 +50,15 @@ export function deleteRole (id) {
     method: 'DELETE'
   })
 }
+
+/**
+ *
+ * 获取-角色详情
+ *
+ */
+export function getRoleDetail (id) {
+  return request({
+    url: `/sys/role/${id}`,
+    method: 'GET'
+  })
+}
