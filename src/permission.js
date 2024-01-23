@@ -32,6 +32,7 @@ router.beforeEach(async (to, from, next) => {
         const filterRoutes = asyncRoutes.filter(item => {
           return roles.menus.includes(item.name)
         }) // 筛选后的路由
+        store.commit('user/setRoutes', filterRoutes)
         router.addRoutes([
           ...filterRoutes,
           { path: '*', redirect: '/404', hidden: true }

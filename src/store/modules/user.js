@@ -1,10 +1,12 @@
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { login, getUserInfo } from '@/api/user'
+import { constantRoutes } from '@/router'
 
 // 存放数据
 const state = {
   token: getToken(), // 从缓存中读取初始值
-  userInfo: {} // 存储用户基本资料状态
+  userInfo: {}, // 存储用户基本资料状态
+  routes: constantRoutes // 存储路由信息，默认存储的是静态路由
 }
 // 修改数据
 const mutations = {
@@ -23,6 +25,9 @@ const mutations = {
   },
   setUserInfo (state, userInfo) {
     state.userInfo = userInfo
+  },
+  setRoutes (state, newRoutes) {
+    state.routes = [...constantRoutes, ...newRoutes] // 静态路由+动态路由
   }
 }
 // 异步操作
