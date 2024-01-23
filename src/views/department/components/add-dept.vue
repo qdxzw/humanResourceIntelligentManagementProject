@@ -209,7 +209,7 @@ export default {
           // 通知父组件更新
           this.$emit('updateDepartment')
           // 提示信息
-          this.$message.success(`${msg}新增部门成功`)
+          this.$message.success(`${msg}部门成功`)
           this.close()
         }
       })
