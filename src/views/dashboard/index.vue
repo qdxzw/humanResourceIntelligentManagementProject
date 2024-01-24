@@ -262,7 +262,13 @@
 import CountTo from 'vue-count-to'
 import { mapGetters } from 'vuex'
 import { getHomeData, getMessageList } from '@/api/home'
-import * as echarts from 'echarts' // 引入所有的echarts
+// import * as echarts from 'echarts' // 引入所有的echarts
+import * as echarts from 'echarts/core' // 引入核心包
+import { LineChart } from 'echarts/charts' // 引入折线图
+import { GridComponent } from 'echarts/components' // 引入组件
+import { CanvasRenderer } from 'echarts/renderers' // 引入渲染器
+echarts.use([LineChart, GridComponent, CanvasRenderer]) // 注册所有引入
+
 export default {
   components: {
     CountTo
@@ -340,7 +346,6 @@ export default {
     },
     async getMessageList () {
       this.messageList = await getMessageList()
-      console.log(this.messageList)
     }
   }
 }

@@ -27,8 +27,8 @@
       </div>
       <div class="right">
         <el-row class="opeate-tools" type="flex" justify="end">
+          <!-- v-permission="add - employee" -->
           <el-button
-            v-permission="add - employee"
             size="mini"
             type="primary"
             @click="$router.push('/employee/detail')"
