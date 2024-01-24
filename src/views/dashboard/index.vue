@@ -147,6 +147,7 @@
             </div>
             <div class="chart">
               <!-- 图表 -->
+              <div ref="social" style="width: 100%; height: 100%" />
             </div>
           </div>
         </div>
@@ -192,6 +193,7 @@
             </div>
             <div class="chart">
               <!-- 图表 -->
+              <div ref="provident" style="width: 100%; height: 100%" />
             </div>
           </div>
         </div>
@@ -260,6 +262,7 @@
 import CountTo from 'vue-count-to'
 import { mapGetters } from 'vuex'
 import { getHomeData, getMessageList } from '@/api/home'
+import * as echarts from 'echarts' // 引入所有的echarts
 export default {
   components: {
     CountTo
@@ -270,9 +273,63 @@ export default {
       messageList: [] // 存放首页消息通知
     }
   },
+  watch: {
+    homeData () {
+      // 设置图表
+      this.social.setOption({
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: this.homeData.socialInsurance?.xAxis
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: this.homeData.socialInsurance?.yAxis,
+            type: 'line',
+            areaStyle: {
+              color: '#04c9be' // 填充颜色
+            },
+            lineStyle: {
+              color: '#04c9be' // 线的颜色
+            }
+          }
+        ]
+      })
+      this.provident.setOption({
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: this.homeData.providentFund?.xAxis
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: this.homeData.providentFund?.yAxis,
+            type: 'line',
+            areaStyle: {
+              color: '#04c9be' // 填充颜色
+            },
+            lineStyle: {
+              color: '#04c9be' // 线的颜色
+            }
+          }
+        ]
+      })
+    }
+  },
   created () {
     this.getHomeData()
     this.getMessageList()
+  },
+  mounted () {
+    // 初始化echarts
+    this.social = echarts.init(this.$refs.social)
+    this.provident = echarts.init(this.$refs.provident)
   },
   computed: {
     ...mapGetters(['name', 'avatar', 'company', 'departmentName']) // 映射给了计算属性
