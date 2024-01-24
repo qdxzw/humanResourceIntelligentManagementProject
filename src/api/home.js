@@ -11,3 +11,15 @@ export function getHomeData () {
     method: 'GET'
   })
 }
+
+/**
+ *
+ * 首页-消息通知
+ *
+ */
+export function getMessageList () {
+  return request({
+    url: '/home/notice',
+    method: 'GET'
+  })
+}

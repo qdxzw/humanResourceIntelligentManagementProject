@@ -234,34 +234,19 @@
         <div class="panel">
           <div class="panel-title">通知公告</div>
           <div class="information-list">
-            <div class="information-list-item">
-              <img src="@/assets/common/img.jpeg" alt="" />
+            <div
+              v-for="(item, index) in messageList"
+              :key="index"
+              class="information-list-item"
+            >
+              <img :src="item.icon" alt="" />
               <div>
                 <p>
-                  <span class="col">朱继柳</span> 发布了
-                  第1期“传智大讲堂”互动讨论获奖名单公布
+                  <span class="col">{{ item.notice.split(' ')[0] }}</span>
+                  {{ item.notice.split(' ')[1] }}
+                  {{ item.notice.split(' ')[2] }}
                 </p>
-                <p>2018-07-21 15:21:38</p>
-              </div>
-            </div>
-            <div class="information-list-item">
-              <img src="@/assets/common/img.jpeg" alt="" />
-              <div>
-                <p>
-                  <span class="col">朱继柳</span> 发布了
-                  第1期“传智大讲堂”互动讨论获奖名单公布
-                </p>
-                <p>2018-07-21 15:21:38</p>
-              </div>
-            </div>
-            <div class="information-list-item">
-              <img src="@/assets/common/img.jpeg" alt="" />
-              <div>
-                <p>
-                  <span class="col">朱继柳</span> 发布了
-                  第1期“传智大讲堂”互动讨论获奖名单公布
-                </p>
-                <p>2018-07-21 15:21:38</p>
+                <p>{{ item.createTime }}</p>
               </div>
             </div>
           </div>
@@ -274,18 +259,20 @@
 <script>
 import CountTo from 'vue-count-to'
 import { mapGetters } from 'vuex'
-import { getHomeData } from '@/api/home'
+import { getHomeData, getMessageList } from '@/api/home'
 export default {
   components: {
     CountTo
   },
   data () {
     return {
-      homeData: {} // 存放首页数据的对象
+      homeData: {}, // 存放首页数据的对象
+      messageList: [] // 存放首页消息通知
     }
   },
   created () {
     this.getHomeData()
+    this.getMessageList()
   },
   computed: {
     ...mapGetters(['name', 'avatar', 'company', 'departmentName']) // 映射给了计算属性
@@ -293,6 +280,10 @@ export default {
   methods: {
     async getHomeData () {
       this.homeData = await getHomeData()
+    },
+    async getMessageList () {
+      this.messageList = await getMessageList()
+      console.log(this.messageList)
     }
   }
 }
