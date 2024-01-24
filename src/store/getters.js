@@ -5,7 +5,9 @@ const getters = {
   userId: state => state.user.userInfo.userId, // 取用户id，用于判断页面是否获取过资料
   avatar: state => state.user.userInfo.staffPhoto, // 用户头像
   name: state => state.user.userInfo.username, // 用户姓名
-  routes: state => state.user.routes
+  routes: state => state.user.routes,
+  company: state => state.user.userInfo.company, // 公司名称
+  departmentName: state => state.user.userInfo.departmentName // 部门名称
 }
 // getters编辑访问
 export default getters
