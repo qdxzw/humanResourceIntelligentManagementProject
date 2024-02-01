@@ -30,6 +30,8 @@ module.exports = {
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
+    disableHostCheck: true,
+    // ngrok http --domain=cockatoo-endless-cardinal.ngrok-free.app 9528
     port: port,
     open: true,
     overlay: {
